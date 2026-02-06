@@ -51,11 +51,21 @@ jobs:
 
     - name: Build Next.js app (Windows)
       if: matrix.os == 'windows-latest'
-      env:
-        CI: 'true'
-        SKIP_ELECTRON_LOAD: 'true'
-        NEXT_TELEMETRY_DISABLED: '1'
-      run: npm run build
+      shell: pwsh
+      run: |
+        # 设置严格的环境隔离
+        $env:CI = 'true'
+        $env:SKIP_ELECTRON_LOAD = 'true'
+        $env:NEXT_TELEMETRY_DISABLED = '1'
+        $env:INIT_CWD = '${{ github.workspace }}'
+        $env:TEMP = '${{ runner.temp }}'
+        $env:TMP = '${{ runner.temp }}'
+        
+        # 确保在项目根目录
+        Set-Location -Path '${{ github.workspace }}'
+        
+        # 使用 npx 直接运行，避免 npm 脚本环境问题
+        npx next build
 
     # electron-builder 会自动调用 @electron/rebuild，无需手动执行
 

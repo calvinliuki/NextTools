@@ -5,21 +5,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false, // 关闭 React Strict Mode
   
-  // 限制文件追踪范围，避免打包无关文件
-  outputFileTracingRoot: path.join(__dirname),
-  
-  // 排除不需要追踪的目录
-  outputFileTracingExcludes: {
-    '*': [
-      'node_modules/@swc/**',
-      'node_modules/esbuild/**',
-      '**/*.map',
-      '**/Downloads/**',
-      '**/Documents/**',
-      '**/Desktop/**',
-      '**/.git/**',
-    ],
-  },
+  // Windows CI: 完全禁用输出文件追踪
+  outputFileTracing: false,
   
   // 禁用 Next.js 开发工具图标
   devIndicators: false,
