@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       '**/Documents/**',
       '**/Desktop/**',
       '**/.git/**',
-      'C:/Users/*/Application Data/**',
+      'C:/Users/**',
     ],
   },
   
