@@ -71,7 +71,6 @@ win:
   icon: public/logo.png
   target:
     - nsis
-    - portable
 
 # NSIS 安装程序配置
 nsis:
