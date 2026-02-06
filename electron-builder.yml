@@ -51,10 +51,6 @@ mac:
       arch:
         - x64
         - arm64
-    - target: zip
-      arch:
-        - x64
-        - arm64
   hardenedRuntime: true
   gatekeeperAssess: false
   # entitlements: build/entitlements.mac.plist

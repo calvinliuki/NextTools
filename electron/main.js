@@ -158,8 +158,10 @@ app.whenReady().then(async () => {
 });
 
 app.on('window-all-closed', () => {
-  stopServer();
+  // macOS 上关闭窗口时不停止服务器，因为应用仍在运行
+  // 只有非 macOS 平台才停止服务器并退出
   if (process.platform !== 'darwin') {
+    stopServer();
     app.quit();
   }
 });

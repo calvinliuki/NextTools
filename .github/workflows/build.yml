@@ -52,19 +52,35 @@ jobs:
         npm install --save-dev @electron/rebuild
         npx @electron/rebuild --force
 
-    - name: Build Electron app
+    - name: Build Electron app (macOS)
+      if: matrix.os == 'macos-latest'
+      env:
+        SKIP_ELECTRON_LOAD: 'true'
+        CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       run: |
-        npm run electron:build:${{ matrix.platform }}
+        npx electron-builder --mac --x64 --arm64
+
+    - name: Build Electron app (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      env:
+        SKIP_ELECTRON_LOAD: 'true'
+      run: |
+        npx electron-builder --linux
+
+    - name: Build Electron app (Windows)
+      if: matrix.os == 'windows-latest'
+      env:
+        SKIP_ELECTRON_LOAD: 'true'
+      run: |
+        npx electron-builder --win
 
     - name: Upload artifacts (macOS)
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@v4
       with:
         name: nexttools-macos
-        path: |
-          dist-electron/*.dmg
-          dist-electron/*.zip
-        if-no-files-found: ignore
+        path: dist-electron/*.dmg
+        if-no-files-found: error
 
     - name: Upload artifacts (Linux)
       if: matrix.os == 'ubuntu-latest'
@@ -72,17 +88,15 @@ jobs:
       with:
         name: nexttools-linux
         path: dist-electron/*.AppImage
-        if-no-files-found: ignore
+        if-no-files-found: error
 
     - name: Upload artifacts (Windows)
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
         name: nexttools-windows
-        path: |
-          dist-electron/*.exe
-          dist-electron/*.msi
-        if-no-files-found: ignore
+        path: dist-electron/*.exe
+        if-no-files-found: error
 
   release:
     needs: build
@@ -100,10 +114,8 @@ jobs:
       with:
         files: |
           releases/nexttools-macos/*.dmg
-          releases/nexttools-macos/*.zip
           releases/nexttools-linux/*.AppImage
           releases/nexttools-windows/*.exe
-          releases/nexttools-windows/*.msi
         tag_name: v${{ github.run_number }}
         name: Release ${{ github.run_number }}
         draft: false

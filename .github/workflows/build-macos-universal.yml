@@ -35,6 +35,8 @@ jobs:
         npx @electron/rebuild --arch arm64 --force
 
     - name: Build universal macOS app
+      env:
+        CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       run: |
         # 使用 electron-builder 构建 universal 二进制
         npx electron-builder --mac --universal
@@ -43,17 +45,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: nexttools-macos-universal
-        path: |
-          dist-electron/*.dmg
-          dist-electron/*.zip
+        path: dist-electron/*.dmg
         if-no-files-found: error
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        files: |
-          dist-electron/*.dmg
-          dist-electron/*.zip
+        files: dist-electron/*.dmg
         tag_name: ${{ github.ref_name }}
         name: NextTools ${{ github.ref_name }} - Universal macOS
         draft: false
