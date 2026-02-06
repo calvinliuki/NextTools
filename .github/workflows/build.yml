@@ -1,0 +1,112 @@
+name: Build NextTools
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        include:
+          - os: macos-latest
+            platform: mac
+          - os: ubuntu-latest
+            platform: linux
+          - os: windows-latest
+            platform: win
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build Next.js app
+      run: |
+        export SKIP_ELECTRON_LOAD=true
+        npm run build
+
+    - name: Rebuild native modules (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        npm install --save-dev @electron/rebuild
+        npx @electron/rebuild --force
+
+    - name: Rebuild native modules (Linux/Windows)
+      if: matrix.os != 'macos-latest'
+      run: |
+        npm install --save-dev @electron/rebuild
+        npx @electron/rebuild --force
+
+    - name: Build Electron app
+      run: |
+        npm run electron:build:${{ matrix.platform }}
+
+    - name: Upload artifacts (macOS)
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nexttools-macos
+        path: |
+          dist-electron/*.dmg
+          dist-electron/*.zip
+        if-no-files-found: ignore
+
+    - name: Upload artifacts (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nexttools-linux
+        path: dist-electron/*.AppImage
+        if-no-files-found: ignore
+
+    - name: Upload artifacts (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nexttools-windows
+        path: |
+          dist-electron/*.exe
+          dist-electron/*.msi
+        if-no-files-found: ignore
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: releases
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          releases/nexttools-macos/*.dmg
+          releases/nexttools-macos/*.zip
+          releases/nexttools-linux/*.AppImage
+          releases/nexttools-windows/*.exe
+          releases/nexttools-windows/*.msi
+        tag_name: v${{ github.run_number }}
+        name: Release ${{ github.run_number }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

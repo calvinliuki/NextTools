@@ -1,0 +1,62 @@
+name: Build NextTools macOS Universal
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-universal:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build Next.js app
+      run: |
+        export SKIP_ELECTRON_LOAD=true
+        npm run build
+
+    - name: Rebuild native modules for universal build
+      run: |
+        npm install --save-dev @electron/rebuild
+        # 为 universal 架构重新编译原生模块
+        npx @electron/rebuild --arch x64 --force
+        npx @electron/rebuild --arch arm64 --force
+
+    - name: Build universal macOS app
+      run: |
+        # 使用 electron-builder 构建 universal 二进制
+        npx electron-builder --mac --universal
+
+    - name: Upload universal artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: nexttools-macos-universal
+        path: |
+          dist-electron/*.dmg
+          dist-electron/*.zip
+        if-no-files-found: error
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist-electron/*.dmg
+          dist-electron/*.zip
+        tag_name: ${{ github.ref_name }}
+        name: NextTools ${{ github.ref_name }} - Universal macOS
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
