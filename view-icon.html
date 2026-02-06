@@ -90,11 +90,11 @@
             // 清除画布（确保透明）
             ctx.clearRect(0, 0, 512, 512);
 
-            // --- 核心调整：进一步增加留白 ---
-            // 将主体缩小到 400px，偏移 (512-400)/2 = 56px
-            const iconSize = 400;
-            const offset = (512 - iconSize) / 2; // 56px
-            const radius = 80; // 适配圆角
+            // --- 核心调整：接近 macOS 标准尺寸 ---
+            // 将主体设为 420px（82%占比），偏移 (512-420)/2 = 46px
+            const iconSize = 420;
+            const offset = (512 - iconSize) / 2; // 46px
+            const radius = 84; // 适配圆角
 
             // 1. 绘制背景渐变
             const gradient = ctx.createLinearGradient(offset, offset, offset + iconSize, offset + iconSize);
@@ -115,8 +115,8 @@
             ctx.fillStyle = gradient;
             ctx.fill();
 
-            // 2. 绘制图标 (内部扳手也相应缩小，更精致)
-            ctx.font = '900 180px "Font Awesome 5 Free"'; 
+            // 2. 绘制图标 (扳手按比例调整)
+            ctx.font = '900 190px "Font Awesome 5 Free"'; 
             ctx.fillStyle = "white";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";

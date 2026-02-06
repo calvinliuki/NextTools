@@ -726,7 +726,7 @@ export default function SessionManager({
             className="flex flex-col border-r border-gray-100 bg-[#f8f9fa] relative group/sidebar shrink-0"
             style={{ width: sidebarWidth }}
           >
-            <div className={`p-3 border-b border-gray-100 ${isElectron && !isFullscreen ? 'pt-7 pl-12' : ''}`}>
+            <div className={`p-3 border-b border-gray-100 ${isElectron && !isFullscreen ? 'pl-18' : ''}`}>
               <h2 className="text-gray-800 font-bold text-sm flex items-center gap-2">
                 <i className="fas fa-sitemap text-[#007acc] text-[12px]"></i>
                 {t('sessionManager.title')}
