@@ -8,11 +8,13 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false, // 关闭 React Strict Mode
   
-  // Electron 打包不使用 standalone 模式，保留完整依赖
-  // output: 'standalone',
-  
-  // Windows CI: 禁用文件追踪避免权限错误
-  ...(isWindowsCI ? {} : {
+  // Windows CI: 使用 standalone 模式避免文件追踪问题
+  ...(isWindowsCI ? {
+    output: 'standalone',
+  } : {
+    // Electron 打包不使用 standalone 模式，保留完整依赖
+    // output: 'standalone',
+    
     // 限制文件追踪范围，避免打包无关文件
     outputFileTracingRoot: path.join(__dirname),
     

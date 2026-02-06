@@ -51,15 +51,16 @@ jobs:
 
     - name: Build Next.js app (Windows)
       if: matrix.os == 'windows-latest'
-      shell: powershell
+      shell: cmd
       env:
         CI: 'true'
         SKIP_ELECTRON_LOAD: 'true'
         NEXT_TELEMETRY_DISABLED: '1'
+        # 禁用 Next.js 文件追踪
+        NEXT_PRIVATE_SKIP_FILE_TRACING: '1'
       run: |
-        # 设置临时目录避免扫描系统目录
-        $env:TEMP = "$env:RUNNER_TEMP"
-        $env:TMP = "$env:RUNNER_TEMP"
+        set TEMP=%RUNNER_TEMP%
+        set TMP=%RUNNER_TEMP%
         npm run build
 
     # electron-builder 会自动调用 @electron/rebuild，无需手动执行
