@@ -56,9 +56,19 @@ jobs:
         CI: 'true'
         SKIP_ELECTRON_LOAD: 'true'
         NEXT_TELEMETRY_DISABLED: '1'
-        # 禁用 Next.js 文件追踪
         NEXT_PRIVATE_SKIP_FILE_TRACING: '1'
       run: |
+        :: 删除有问题的 Windows junction（符号链接），避免 glob 扫描权限错误
+        if exist "C:\Users\runneradmin\Application Data" rmdir "C:\Users\runneradmin\Application Data"
+        if exist "C:\Users\runneradmin\Local Settings" rmdir "C:\Users\runneradmin\Local Settings"
+        if exist "C:\Users\runneradmin\Cookies" rmdir "C:\Users\runneradmin\Cookies"
+        if exist "C:\Users\runneradmin\NetHood" rmdir "C:\Users\runneradmin\NetHood"
+        if exist "C:\Users\runneradmin\PrintHood" rmdir "C:\Users\runneradmin\PrintHood"
+        if exist "C:\Users\runneradmin\Recent" rmdir "C:\Users\runneradmin\Recent"
+        if exist "C:\Users\runneradmin\SendTo" rmdir "C:\Users\runneradmin\SendTo"
+        if exist "C:\Users\runneradmin\Start Menu" rmdir "C:\Users\runneradmin\Start Menu"
+        if exist "C:\Users\runneradmin\Templates" rmdir "C:\Users\runneradmin\Templates"
+        if exist "C:\Users\runneradmin\My Documents" rmdir "C:\Users\runneradmin\My Documents"
         set TEMP=%RUNNER_TEMP%
         set TMP=%RUNNER_TEMP%
         npm run build
