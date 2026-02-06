@@ -186,7 +186,7 @@ NextTools is a toolkit for programmers' daily use, designed to integrate common 
 ## Local Development and Debugging
 
 ### Prerequisites
-- Node.js (version 18 or higher recommended)
+- Node.js (version 20.9.0 or higher recommended)
 - npm or yarn package manager
 - Git for version control
 
