@@ -52,9 +52,11 @@ jobs:
     - name: Build Next.js app (Windows)
       if: matrix.os == 'windows-latest'
       shell: powershell
+      env:
+        CI: 'true'
+        SKIP_ELECTRON_LOAD: 'true'
+        NEXT_TELEMETRY_DISABLED: '1'
       run: |
-        $env:SKIP_ELECTRON_LOAD = 'true'
-        $env:NEXT_TELEMETRY_DISABLED = '1'
         # 设置临时目录避免扫描系统目录
         $env:TEMP = "$env:RUNNER_TEMP"
         $env:TMP = "$env:RUNNER_TEMP"
