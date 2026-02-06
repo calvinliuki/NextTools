@@ -21,6 +21,7 @@ jobs:
             platform: win
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
 
     steps:
     - name: Checkout code
@@ -40,17 +41,7 @@ jobs:
         export SKIP_ELECTRON_LOAD=true
         npm run build
 
-    - name: Rebuild native modules (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        npm install --save-dev @electron/rebuild
-        npx @electron/rebuild --force
-
-    - name: Rebuild native modules (Linux/Windows)
-      if: matrix.os != 'macos-latest'
-      run: |
-        npm install --save-dev @electron/rebuild
-        npx @electron/rebuild --force
+    # electron-builder 会自动调用 @electron/rebuild，无需手动执行
 
     - name: Build Electron app (macOS)
       if: matrix.os == 'macos-latest'

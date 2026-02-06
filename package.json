@@ -1,6 +1,8 @@
 {
   "name": "next-tools",
   "version": "0.1.0",
+  "description": "A developer tools collection for programmers - Redis, Kafka, SSH, HTTP, ZooKeeper, Elasticsearch, Database",
+  "author": "kunyu",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
