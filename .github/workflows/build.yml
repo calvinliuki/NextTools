@@ -9,6 +9,9 @@ on:
 
 jobs:
   build:
+    env:
+      HOME: ${{ github.workspace }}
+      USERPROFILE: ${{ github.workspace }}
     strategy:
       fail-fast: false
       matrix:
