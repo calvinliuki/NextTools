@@ -10,6 +10,20 @@ function getDbPath(): string {
     return dbPath;
   }
 
+  if (process.env.NEXTTOOLS_DB_PATH) {
+    dbPath = process.env.NEXTTOOLS_DB_PATH;
+  } else if (process.env.NEXTTOOLS_DATA_DIR) {
+    dbPath = path.join(process.env.NEXTTOOLS_DATA_DIR, 'connections.db');
+  }
+
+  if (dbPath) {
+    const dataDir = path.dirname(dbPath);
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+    return dbPath;
+  }
+
   // 在运行时动态判断 Electron 环境
   const isElectron = typeof process !== 'undefined' && process.versions && process.versions.electron;
   const skipElectronLoad = process.env.SKIP_ELECTRON_LOAD === 'true';

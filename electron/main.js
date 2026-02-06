@@ -76,15 +76,25 @@ function startServer() {
     // 生产模式：启动内嵌的 Next.js 服务器
     const serverPath = path.join(process.resourcesPath, 'server', 'server.js');
     const serverDir = path.join(process.resourcesPath, 'server');
+    const userDataDir = app.getPath('userData');
+    const dbPath = path.join(userDataDir, 'connections.db');
 
     console.log('[Electron] 启动服务器:', serverPath);
     console.log('[Electron] 工作目录:', serverDir);
+    console.log('[Electron] 数据库路径:', dbPath);
 
     // 检查 server.js 是否存在
     if (!fs.existsSync(serverPath)) {
       console.error('[Electron] 错误: server.js 不存在:', serverPath);
       reject(new Error('server.js not found'));
       return;
+    }
+
+    // 确保数据库目录存在（用户目录可写）
+    try {
+      fs.mkdirSync(userDataDir, { recursive: true });
+    } catch (err) {
+      console.warn('[Electron] 创建用户目录失败:', err);
     }
 
     // 使用 Electron 内置 Node.js 运行 server.js
@@ -95,6 +105,7 @@ function startServer() {
         NODE_ENV: 'production',
         PORT: PORT.toString(),
         ELECTRON_RUN_AS_NODE: '1',
+        NEXTTOOLS_DB_PATH: dbPath,
       },
       stdio: ['ignore', 'pipe', 'pipe'],
     });

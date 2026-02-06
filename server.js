@@ -5,6 +5,7 @@ const { WebSocketServer } = require('ws');
 const { Client: SSHClient } = require('ssh2');
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -14,8 +15,22 @@ const handle = app.getRequestHandler();
 const sshSessions = new Map();
 
 // 获取数据库连接
+function resolveDbPath() {
+  if (process.env.NEXTTOOLS_DB_PATH) {
+    return process.env.NEXTTOOLS_DB_PATH;
+  }
+  if (process.env.NEXTTOOLS_DATA_DIR) {
+    return path.join(process.env.NEXTTOOLS_DATA_DIR, 'connections.db');
+  }
+  return path.join(process.cwd(), 'data', 'connections.db');
+}
+
 function getDatabase() {
-  const dbPath = path.join(process.cwd(), 'data', 'connections.db');
+  const dbPath = resolveDbPath();
+  const dbDir = path.dirname(dbPath);
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
   const db = new Database(dbPath);
   
   // 初始化数据库表
