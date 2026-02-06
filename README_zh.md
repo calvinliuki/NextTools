@@ -163,11 +163,9 @@ NextTools 是一个面向程序员日常使用的工具集，旨在将常见的�
 
 ### 数据持久化
 - 所有连接配置通过 SQLite 数据库存储
-
 - 使用 Better-SQLite3 作为数据库引擎
-
--  数据库文件位置（Database file location）
-  - dev: `data/connections.db`
+- 数据库文件位置：
+  - 开发环境: `data/connections.db`
   - macOS: `~/Library/Application Support/NextTools/connections.db`
   - Windows: `%APPDATA%\NextTools\connections.db`
   - Linux: `~/.config/NextTools/connections.db`
@@ -186,6 +184,101 @@ NextTools 是一个面向程序员日常使用的工具集，旨在将常见的�
 - 敏感信息（如密码、私钥）加密存储（取决于具体实现）
 - 连接超时和重试机制
 - 输入参数验证
+
+## 本地开发与调试
+
+### 前置条件
+- Node.js（建议版本 18 或更高）
+- npm 或 yarn 包管理器
+- Git 版本控制工具
+
+### 快速开始
+
+1. **克隆仓库**
+   ```bash
+   git clone <仓库地址>
+   cd next-tools
+   ```
+
+2. **安装依赖**
+   ```bash
+   npm install
+   ```
+
+3. **启动开发服务器**
+   ```bash
+   npm run dev
+   ```
+   这将启动 Next.js 开发服务器，访问地址为 `http://localhost:3000`
+
+### 开发命令说明
+
+- **Web 开发模式**: `npm run dev`
+  - 启动 Next.js 开发服务器
+  - 为前端更改提供热重载
+  - 运行自定义 Node.js 服务器处理 API 路由
+
+- **Electron 开发模式**: `npm run electron:dev`
+  - 同时启动 Web 服务器和 Electron 应用
+  - 自动打开桌面应用程序
+  - 为 Web 和 Electron 组件提供热重载
+
+- **代码检查**: `npm run lint`
+  - 运行 ESLint 检查代码质量
+  - 帮助维护一致的编码标准
+
+### 项目结构概览
+
+```
+next-tools/
+├── app/                    # Next.js App Router 页面和组件
+├── electron/              # Electron 主进程文件
+├── lib/                   # 共享工具库
+├── scripts/               # 构建和工具脚本
+├── i18n/                  # 国际化文件
+├── img/                   # 图片资源
+├── data/                  # SQLite 数据库文件（运行时创建）
+├── server.js             # 自定义 Node.js 服务器
+└── package.json          # 项目依赖和脚本
+```
+
+### 调试技巧
+
+1. **前端调试**
+   - 使用浏览器开发者工具（F12）检查 React 组件
+   - 启用 React DevTools 扩展获得更好的组件调试体验
+   - 检查浏览器控制台的 JavaScript 错误
+
+2. **后端/API 调试**
+   - 服务器日志输出到运行 `npm run dev` 的终端
+   - 可以通过浏览器或 Postman 等工具直接测试 API 路由
+   - 检查终端输出的数据库连接问题
+
+3. **Electron 调试**
+   - 使用 `npm run electron:dev` 进行开发
+   - 使用 `Ctrl/Cmd + Shift + I` 打开 Electron 开发者工具
+   - 主进程日志显示在终端中
+
+4. **数据库调试**
+   - 数据库文件位置：`data/connections.db`
+   - 使用 SQLite 浏览器工具检查数据库内容
+   - 连接配置存储在 `connections` 表中
+
+### 常见开发场景
+
+- **添加新模块**：在 `app/api/` 中创建新的 API 路由和对应的前端组件
+- **修改现有功能**：大部分业务逻辑在 `lib/` 目录中
+- **UI 更改**：修改 `app/components/` 中的组件
+- **国际化**：更新 `i18n/locales/` 中的 JSON 文件
+
+### 故障排除
+
+如果遇到问题：
+1. 确保所有依赖已安装：`npm install`
+2. 清除 Next.js 缓存：`rm -rf .next`
+3. 检查 Node.js 版本兼容性
+4. 验证 3000 端口是否可用
+5. 查看终端输出的错误信息
 
 ## 前端界面布局
 

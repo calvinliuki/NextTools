@@ -183,6 +183,101 @@ NextTools is a toolkit for programmers' daily use, designed to integrate common 
 - Connection timeout and retry mechanisms
 - Input parameter validation
 
+## Local Development and Debugging
+
+### Prerequisites
+- Node.js (version 18 or higher recommended)
+- npm or yarn package manager
+- Git for version control
+
+### Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd next-tools
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+   This will start the Next.js development server on `http://localhost:3000`
+
+### Development Commands
+
+- **Web Development Mode**: `npm run dev`
+  - Starts the Next.js development server
+  - Provides hot reloading for frontend changes
+  - Runs the custom Node.js server for API routes
+
+- **Electron Development Mode**: `npm run electron:dev`
+  - Starts both web server and Electron app simultaneously
+  - Automatically opens the desktop application
+  - Provides hot reloading for both web and Electron components
+
+- **Code Linting**: `npm run lint`
+  - Runs ESLint to check code quality
+  - Helps maintain consistent coding standards
+
+### Project Structure Overview
+
+```
+next-tools/
+├── app/                    # Next.js App Router pages and components
+├── electron/              # Electron main process files
+├── lib/                   # Shared utility libraries
+├── scripts/               # Build and utility scripts
+├── i18n/                  # Internationalization files
+├── img/                   # Image assets
+├── data/                  # SQLite database files (created at runtime)
+├── server.js             # Custom Node.js server
+└── package.json          # Project dependencies and scripts
+```
+
+### Debugging Tips
+
+1. **Frontend Debugging**
+   - Use browser DevTools (F12) for React component inspection
+   - Enable React DevTools extension for better component debugging
+   - Check browser console for JavaScript errors
+
+2. **Backend/API Debugging**
+   - Server logs are output to the terminal where you ran `npm run dev`
+   - API routes can be tested directly through browser or tools like Postman
+   - Check terminal output for database connection issues
+
+3. **Electron Debugging**
+   - Use `npm run electron:dev` for development
+   - Open Electron DevTools with `Ctrl/Cmd + Shift + I`
+   - Main process logs appear in the terminal
+
+4. **Database Debugging**
+   - Database file location: `data/connections.db`
+   - Use SQLite browser tools to inspect database contents
+   - Connection configurations are stored in the `connections` table
+
+### Common Development Scenarios
+
+- **Adding new modules**: Create new API routes in `app/api/` and corresponding frontend components
+- **Modifying existing functionality**: Most business logic is in `lib/` directory
+- **UI changes**: Modify components in `app/components/`
+- **Internationalization**: Update JSON files in `i18n/locales/`
+
+### Troubleshooting
+
+If you encounter issues:
+1. Ensure all dependencies are installed: `npm install`
+2. Clear Next.js cache: `rm -rf .next`
+3. Check Node.js version compatibility
+4. Verify port 3000 is available
+5. Review error messages in terminal output
+
 ## Frontend Interface Layout
 
 - **Home Page**: Function card navigation
