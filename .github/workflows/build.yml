@@ -37,9 +37,9 @@ jobs:
       run: npm ci
 
     - name: Build Next.js app
-      run: |
-        export SKIP_ELECTRON_LOAD=true
-        npm run build
+      env:
+        SKIP_ELECTRON_LOAD: 'true'
+      run: npm run build
 
     # electron-builder 会自动调用 @electron/rebuild，无需手动执行
 
