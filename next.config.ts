@@ -14,10 +14,13 @@ const nextConfig: NextConfig = {
       'node_modules/@swc/**',
       'node_modules/esbuild/**',
       '**/*.map',
+      '**/Application Data/**',
+      '**/AppData/**',
       '**/Downloads/**',
       '**/Documents/**',
       '**/Desktop/**',
       '**/.git/**',
+      'C:/Users/*/Application Data/**',
     ],
   },
   
