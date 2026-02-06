@@ -16,18 +16,20 @@ const nextConfig: NextConfig = {
       '**/*.map',
       '**/Application Data/**',
       '**/AppData/**',
+      '**/AppData/Local/**',
       '**/Downloads/**',
       '**/Documents/**',
       '**/Desktop/**',
       '**/.git/**',
       'C:/Users/*/Application Data/**',
       'C:/Users/*/AppData/**',
+      'C:/Users/**/Application Data/**',
+      'C:/Users/**/AppData/**',
+      'C:\\Users\\*\\Application Data\\**',
+      'C:\\Users\\*\\AppData\\**',
+      'C:\\Users\\**\\Application Data\\**',
+      'C:\\Users\\**\\AppData\\**',
     ],
-  },
-
-  // 兼容部分版本在 experimental 下读取
-  experimental: {
-    outputFileTracingRoot: path.resolve(__dirname),
   },
   
   // 禁用 Next.js 开发工具图标
