@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: macos-latest
@@ -41,10 +42,23 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build Next.js app
+    - name: Build Next.js app (Unix)
+      if: matrix.os != 'windows-latest'
       env:
         SKIP_ELECTRON_LOAD: 'true'
+        NEXT_TELEMETRY_DISABLED: '1'
       run: npm run build
+
+    - name: Build Next.js app (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: powershell
+      run: |
+        $env:SKIP_ELECTRON_LOAD = 'true'
+        $env:NEXT_TELEMETRY_DISABLED = '1'
+        # 设置临时目录避免扫描系统目录
+        $env:TEMP = "$env:RUNNER_TEMP"
+        $env:TMP = "$env:RUNNER_TEMP"
+        npm run build
 
     # electron-builder 会自动调用 @electron/rebuild，无需手动执行
 
