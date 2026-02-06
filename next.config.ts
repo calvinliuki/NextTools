@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: false, // 关闭 React Strict Mode
   
   // 限制文件追踪范围，避免打包无关文件
-  outputFileTracingRoot: path.join(__dirname),
+  outputFileTracingRoot: path.resolve(__dirname),
   
   // 排除不需要追踪的目录
   outputFileTracingExcludes: {
@@ -20,8 +20,14 @@ const nextConfig: NextConfig = {
       '**/Documents/**',
       '**/Desktop/**',
       '**/.git/**',
-      'C:/Users/**',
+      'C:/Users/*/Application Data/**',
+      'C:/Users/*/AppData/**',
     ],
+  },
+
+  // 兼容部分版本在 experimental 下读取
+  experimental: {
+    outputFileTracingRoot: path.resolve(__dirname),
   },
   
   // 禁用 Next.js 开发工具图标
