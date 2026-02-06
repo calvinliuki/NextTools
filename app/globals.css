@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #007acc;
+  --color-secondary: #36CFC9;
+  --color-accent: #722ED1;
+  --color-warning: #FF7D00;
+  --color-danger: #F53F3F;
+  --color-success: #00B42A;
+  --color-dark: #1D2129;
+  --color-dark-2: #4E5969;
+  --color-light: #F9FAFB;
+  --color-light-1: #F2F3F5;
+  --color-light-2: #E5E6EB;
+  --color-light-3: #C9CDD4;
+  --color-sidebar: #ffffff;
+  --color-terminal: #ffffff;
+  --color-terminal-text: #333333;
+  --color-tab-active: #007acc;
+  --color-tab-inactive: #f0f0f0;
+  --color-status-bar: #f0f0f0;
+  --color-border: #e0e0e0;
+  --font-sans: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Inter', system-ui, sans-serif;
+  --font-mono: 'Consolas', 'Monaco', 'Courier New', monospace;
+  
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .content-auto {
+    content-visibility: auto;
+  }
+  
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #007acc 0%, #005a9e 100%);
+  }
+  
+  .card-hover {
+    transition: all 0.3s;
+  }
+  
+  .card-hover:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+  }
+  
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-slide-in-left {
+    animation: slide-in-left 0.3s ease-out;
+  }
+  
+  .resize-handle {
+    width: 0.25rem;
+    background-color: #d1d5db;
+    cursor: col-resize;
+    transition: background-color 0.2s;
+  }
+  
+  .resize-handle:hover {
+    background-color: #9ca3af;
+  }
+  
+  .tree-item-active {
+    background-color: rgba(0, 122, 204, 0.2);
+    color: #007acc;
+  }
+  
+  .tab-active {
+    background-color: #ffffff;
+    color: #007acc;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 2px solid #ffffff;
+    margin-bottom: -1px;
+    z-index: 10;
+    box-shadow: inset 0 2px 0 0 #007acc;
+    margin-left: -1px;
+  }
+  
+  .tab-inactive {
+    background-color: #f3f3f3;
+    color: #616161;
+    transition: background-color 0.2s;
+  }
+  
+  .tab-inactive:hover {
+    background-color: #e5e7eb;
+  }
+
+  /* 隐藏滚动条但保留滚动功能 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 主题变量定义 - 默认使用浅色模式 */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f2f3f5;
+  --bg-hover: #e5e6eb;
+  --bg-modal: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.3);
+  
+  --text-primary: #1D2129;
+  --text-secondary: #4E5969;
+  --text-tertiary: #86909C;
+  --text-inverse: #ffffff;
+  
+  --border-primary: #E5E6EB;
+  --border-secondary: #C9CDD4;
+  --border-focus: #165DFF;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}

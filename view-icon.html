@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>NextTools 图标查看器</title>
+    <!-- 引入项目同款 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        /* 1:1 复刻 UI 中的图标样式 */
+        .icon-box {
+            width: 512px;
+            height: 512px;
+            border-radius: 100px; /* 比例复刻 rounded-lg */
+            /* 复刻 globals.css 中的 .bg-gradient-primary */
+            background: linear-gradient(135deg, #007acc 0%, #005a9e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: 0 30px 60px rgba(0, 122, 204, 0.3);
+            margin-bottom: 30px;
+        }
+        .icon-box i {
+            font-size: 200px; /* 缩小比例，增加留白 */
+        }
+        .info {
+            color: #666;
+            font-size: 18px;
+        }
+        .hint {
+            margin-top: 10px;
+            color: #999;
+            font-size: 14px;
+        }
+        .download-btn {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .download-btn:hover {
+            background-color: #005a9e;
+        }
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 核心图标区域 -->
+        <div class="icon-box" id="icon-to-save">
+            <i class="fas fa-wrench"></i>
+        </div>
+        
+        <div class="info">NextTools 高清图标预览 (512x512)</div>
+        <button class="download-btn" onclick="downloadPNG()">保存为 512x512 PNG</button>
+        <div class="hint">点击上方按钮可直接下载。</div>
+    </div>
+
+    <canvas id="canvas" width="512" height="512"></canvas>
+
+    <script>
+        async function downloadPNG() {
+            // 确保字体已加载
+            await document.fonts.load('900 180px "Font Awesome 5 Free"');
+            
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 清除画布（确保透明）
+            ctx.clearRect(0, 0, 512, 512);
+
+            // --- 核心调整：进一步增加留白 ---
+            // 将主体缩小到 400px，偏移 (512-400)/2 = 56px
+            const iconSize = 400;
+            const offset = (512 - iconSize) / 2; // 56px
+            const radius = 80; // 适配圆角
+
+            // 1. 绘制背景渐变
+            const gradient = ctx.createLinearGradient(offset, offset, offset + iconSize, offset + iconSize);
+            gradient.addColorStop(0, '#007acc');
+            gradient.addColorStop(1, '#005a9e');
+            
+            ctx.beginPath();
+            ctx.moveTo(offset + radius, offset);
+            ctx.lineTo(offset + iconSize - radius, offset);
+            ctx.quadraticCurveTo(offset + iconSize, offset, offset + iconSize, offset + radius);
+            ctx.lineTo(offset + iconSize, offset + iconSize - radius);
+            ctx.quadraticCurveTo(offset + iconSize, offset + iconSize, offset + iconSize - radius, offset + iconSize);
+            ctx.lineTo(offset + radius, offset + iconSize);
+            ctx.quadraticCurveTo(offset, offset + iconSize, offset, offset + iconSize - radius);
+            ctx.lineTo(offset, offset + radius);
+            ctx.quadraticCurveTo(offset, offset, offset + radius, offset);
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // 2. 绘制图标 (内部扳手也相应缩小，更精致)
+            ctx.font = '900 180px "Font Awesome 5 Free"'; 
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            
+            ctx.fillText('\uf0ad', 256, 256);
+
+            // 3. 触发下载
+            const link = document.createElement('a');
+            link.download = 'next-tools-logo.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

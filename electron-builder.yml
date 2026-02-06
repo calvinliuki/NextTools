@@ -1,0 +1,106 @@
+appId: com.nexttools.app
+productName: NextTools
+copyright: Copyright © 2024
+
+# 输出目录
+directories:
+  output: dist-electron
+  buildResources: build
+
+# 打包到 asar 的文件
+files:
+  - package.json
+  - electron
+  - "!**/node_modules/**"
+
+# ASAR 打包
+asar: true
+asarUnpack:
+  - "**/*.node"
+  - "**/better-sqlite3/**"
+  - "**/ssh2/**"
+
+# 额外资源（Next.js 应用）
+extraResources:
+  - from: server.js
+    to: server/server.js
+  - from: .next
+    to: server/.next
+    filter:
+      - "**/*"
+      - "!cache/**"
+  - from: node_modules
+    to: server/node_modules
+    filter:
+      - "**/*"
+      - "!.cache/**"
+  - from: public
+    to: server/public
+  - from: data
+    to: server/data
+    filter:
+      - "**/*"
+      - "!connections.db"  # 不打包用户数据库文件
+
+# macOS 配置
+mac:
+  category: public.app-category.developer-tools
+  icon: public/logo.png
+  target:
+    - target: dmg
+      arch:
+        - arm64
+    - target: zip
+      arch:
+        - arm64
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  # entitlements: build/entitlements.mac.plist
+  # entitlementsInherit: build/entitlements.mac.plist
+
+# DMG 配置
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+  window:
+    width: 540
+    height: 380
+
+# Windows 配置
+win:
+  icon: public/logo.png
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+
+# NSIS 安装程序配置
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  # installerIcon: build/icon.ico
+  # uninstallerIcon: build/icon.ico
+  # installerHeaderIcon: build/icon.ico
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: NextTools
+
+# Linux 配置
+linux:
+  icon: public/logo.png
+  category: Development
+  target:
+    - target: AppImage
+      arch:
+        - x64
+
+# 发布配置（可选）
+publish: null
