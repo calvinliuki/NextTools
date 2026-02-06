@@ -47,10 +47,7 @@ mac:
   category: public.app-category.developer-tools
   icon: public/logo.png
   target:
-    - target: dmg
-      arch:
-        - x64
-        - arm64
+    - dmg
   hardenedRuntime: true
   gatekeeperAssess: false
   # entitlements: build/entitlements.mac.plist
@@ -73,12 +70,8 @@ dmg:
 win:
   icon: public/logo.png
   target:
-    - target: nsis
-      arch:
-        - x64
-    - target: portable
-      arch:
-        - x64
+    - nsis
+    - portable
 
 # NSIS 安装程序配置
 nsis:
@@ -96,9 +89,7 @@ linux:
   icon: public/logo.png
   category: Development
   target:
-    - target: AppImage
-      arch:
-        - x64
+    - AppImage
 
 # 发布配置（可选）
 publish: null

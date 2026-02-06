@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
       '**/Documents/**',
       '**/Desktop/**',
       '**/.git/**',
+      // Windows CI 系统目录排除
+      '**/Application Data/**',
+      '**/AppData/**',
+      'C:/Users/*/Application Data/**',
+      'C:/Users/*/AppData/**',
     ],
   },
   
@@ -69,6 +74,18 @@ const nextConfig: NextConfig = {
         ignored: /node_modules/,
       };
     }
+    
+    // Windows CI 环境：排除系统敏感目录
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: [
+        '**/node_modules/**',
+        '**/Application Data/**',
+        '**/AppData/**',
+        'C:/Users/*/Application Data/**',
+      ],
+    };
+    
     return config;
   },
 };
