@@ -16,6 +16,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - os: macos-latest
+            platform: mac
+            arch: x64
+          - os: macos-latest
+            platform: mac
+            arch: arm64
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
           - os: windows-latest
             platform: win
             arch: x64
@@ -110,6 +119,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    permissions:
+      contents: write
     
     steps:
     - name: Download all artifacts
